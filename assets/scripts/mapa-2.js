@@ -592,6 +592,7 @@ function renderCollectionLayers(overlayRoot, rows) {
 }
 
 function renderCollectionControls(sidebar, rows) {
+  <!--Vegetación-->    
   const vegetationSection = sidebar.querySelector("#content2 .nojodas");
   if (!vegetationSection || !rows.length) {
     return;
@@ -627,6 +628,118 @@ function renderCollectionControls(sidebar, rows) {
   if (!unresolved.length) {
     return;
   }
+  
+<!--Minerales-->
+ const mineralSection = sidebar.querySelector("#content3 .nojodas");
+  if (!mineralSection || !rows.length) {
+    return;
+  }
+
+  mineralSection.querySelector(".dynamic-collection-group")?.remove();
+
+  const grouped = rows.reduce((map, row) => {
+    if (!map.has(row.layerId)) {
+      map.set(row.layerId, row);
+    }
+
+    return map;
+  }, new Map());
+
+  const unresolved = [];
+
+  Array.from(grouped.values()).forEach((item, index) => {
+    const legacyLabel = Array.from(mineralSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabel) {
+      legacyLabel.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel.classList.add("is-dynamic");
+      return;
+    }
+
+    unresolved.push({ item, index });
+  });
+
+  if (!unresolved.length) {
+    return;
+  }    
+<!--Monstruos-->
+ const monsterSection = sidebar.querySelector("#content4 .nojodas");
+  if (!monsterSection || !rows.length) {
+    return;
+  }
+
+  monsterSection.querySelector(".dynamic-collection-group")?.remove();
+
+  const grouped = rows.reduce((map, row) => {
+    if (!map.has(row.layerId)) {
+      map.set(row.layerId, row);
+    }
+
+    return map;
+  }, new Map());
+
+  const unresolved = [];
+
+  Array.from(grouped.values()).forEach((item, index) => {
+    const legacyLabel = Array.from(monsterSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabel) {
+      legacyLabel.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel.classList.add("is-dynamic");
+      return;
+    }
+
+    unresolved.push({ item, index });
+  });
+
+  if (!unresolved.length) {
+    return;
+  }  
+
+<!--Comida-->   
+  const foodSection = sidebar.querySelector("#content5 .nojodas");
+  if (!monsterSection || !rows.length) {
+    return;
+  }
+
+  foodSection.querySelector(".dynamic-collection-group")?.remove();
+
+  const grouped = rows.reduce((map, row) => {
+    if (!map.has(row.layerId)) {
+      map.set(row.layerId, row);
+    }
+
+    return map;
+  }, new Map());
+
+  const unresolved = [];
+
+  Array.from(grouped.values()).forEach((item, index) => {
+    const legacyLabel = Array.from(foodSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabel) {
+      legacyLabel.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel.classList.add("is-dynamic");
+      return;
+    }
+
+    unresolved.push({ item, index });
+  });
+
+  if (!unresolved.length) {
+    return;
+  }
+
+<!-- Si hubo error de asignación de grupo,sale aquí -->    
 
   const group = document.createElement("div");
   group.className = "dynamic-collection-group";
@@ -651,8 +764,11 @@ function renderCollectionControls(sidebar, rows) {
 
     group.append(input, label);
   });
-
+<!-- Append final -->  
   vegetationSection.prepend(group);
+  mineralSection.prepend(group);
+  monsterSection.prepend(group);
+  foodSection.prepend(group);
 }
 
 function enhanceMarkers(mapContainer, sidebar, zoomApi) {
