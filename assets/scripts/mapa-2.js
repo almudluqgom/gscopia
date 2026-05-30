@@ -687,6 +687,7 @@ function enhanceMarkers(mapContainer, sidebar, zoomApi) {
   markers.forEach((marker) => {
     const input = marker.querySelector('input[name="tabthree-group-3"]');
     const label = marker.querySelector("label");
+    console.log(label);
     const content = marker.querySelector(".contentlugar");
     const glyph = label?.querySelector("span, i");
 
