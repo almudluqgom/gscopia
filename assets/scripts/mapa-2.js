@@ -1,7 +1,8 @@
+//---------------------------------------------------------------------------------------------------------------
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function localParseCsv(text) {
   const rows = [];
   let row = [];
@@ -55,7 +56,7 @@ function localParseCsv(text) {
     return entry;
   });
 }
-
+//---------------------------------------------------------------------------------------------------------------
 async function loadCsvRows(path) {
   if (typeof fetchCsv === "function") {
     return fetchCsv(path);
@@ -68,7 +69,7 @@ async function loadCsvRows(path) {
 
   return localParseCsv(await response.text());
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function toggleOverlay(elementId, trigger) {
   const overlay = document.getElementById(elementId);
 
@@ -80,7 +81,7 @@ function toggleOverlay(elementId, trigger) {
   overlay.style.display = nextHidden ? "none" : "block";
   trigger?.classList.toggle("is-active", !nextHidden);
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function createMapToolbar() {
   const toolbar = document.createElement("div");
   toolbar.className = "map-toolbar";
@@ -99,7 +100,7 @@ function createMapToolbar() {
 
   return toolbar;
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function buildViewport(mapContainer) {
   const viewport = document.createElement("div");
   viewport.className = "map-viewport";
@@ -119,7 +120,7 @@ function buildViewport(mapContainer) {
     baseImage: stage.querySelector(".map-image")
   };
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function waitForImageReady(image) {
   if (!image) {
     return Promise.resolve();
@@ -146,11 +147,11 @@ function waitForImageReady(image) {
     image.addEventListener("error", handleError, { once: true });
   });
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function parsePercent(value) {
   return Number.parseFloat(String(value).replace("%", "")) || 0;
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function extractMarkerTitle(content) {
   const titleNode = content?.querySelector(".descriptitulo");
   if (titleNode) {
@@ -160,7 +161,7 @@ function extractMarkerTitle(content) {
   const fallback = content?.textContent?.trim() ?? "";
   return fallback.slice(0, 80) || "Punto del mapa";
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function renderSidebarDetail(sidebar, content) {
   let detail = sidebar.querySelector(".sidebar-detail");
 
@@ -201,7 +202,7 @@ function renderSidebarDetail(sidebar, content) {
     </div>
   `;
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function setupZoom(mapContainer, viewport, stage, baseImage) {
   const readout = mapContainer.querySelector(".map-zoom-readout");
   const state = {
@@ -430,6 +431,7 @@ function setupZoom(mapContainer, viewport, stage, baseImage) {
   return { centerOnMarker, resetZoom, screenToMap };
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function readLegacyMarkers(mapLayer) {
   return Array.from(mapLayer.querySelectorAll(".lugar1"))
     .map((marker, index) => {
@@ -441,7 +443,6 @@ function readLegacyMarkers(mapLayer) {
       if (!label || !content || !titleNode) {
         return null;
       }
-
       return {
         id: marker.querySelector("input")?.id || `mapa-punto-${index + 1}`,
         title: titleNode.textContent.trim(),
@@ -457,6 +458,7 @@ function readLegacyMarkers(mapLayer) {
     .filter((marker) => marker.title && marker.title !== "Explora el mundo dándole click a los iconos en el mapa para ver su información, diviértete!");
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function normalizeMarkerRow(row, index) {
   const x = Number.parseFloat(String(row.x).replace(",", ".")) || 0;
   const y = Number.parseFloat(String(row.y).replace(",", ".")) || 0;
@@ -473,6 +475,7 @@ function normalizeMarkerRow(row, index) {
   };
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function normalizeCollectionRow(row, index) {
   return {
     id: row.id || `${row.layer_id || "capa"}-${index + 1}`,
@@ -486,6 +489,7 @@ function normalizeCollectionRow(row, index) {
   };
 }
 
+//---------------------------------------------------------------------------------------------------------------
 async function getMarkerData(mapLayer) {
   const legacyMarkers = readLegacyMarkers(mapLayer);
 
@@ -512,6 +516,7 @@ async function getCollectionData() {
   }
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function ensureMapLayer(stage) {
   let mapLayer = stage.querySelector(".lugar");
 
@@ -524,6 +529,7 @@ function ensureMapLayer(stage) {
   return mapLayer;
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function ensureOverlayRoot(stage) {
   let root = stage.querySelector(".map-overlay-root");
 
@@ -536,6 +542,7 @@ function ensureOverlayRoot(stage) {
   return root;
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function renderMarkers(mapLayer, markers) {
   mapLayer.innerHTML = markers
     .map((marker, index) => {
@@ -554,6 +561,7 @@ function renderMarkers(mapLayer, markers) {
     .join("");
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function renderCollectionLayers(overlayRoot, rows) {
   overlayRoot.innerHTML = "";
 
@@ -591,21 +599,18 @@ function renderCollectionLayers(overlayRoot, rows) {
   });
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function renderCollectionControls(sidebar, rows) {
   
-  // Vegetación  ------------------------------------------------------------------------------------------------------------
   const vegetationSection = sidebar.querySelector("#content2 .nojodas");
   if (!vegetationSection || !rows.length) {
     return;
   }
-
   vegetationSection.querySelector(".dynamic-collection-group")?.remove();
-
   const grouped = rows.reduce((map, row) => {
     if (!map.has(row.layerId)) {
       map.set(row.layerId, row);
     }
-
     return map;
   }, new Map());
 
@@ -650,13 +655,11 @@ function renderCollectionControls(sidebar, rows) {
     label.setAttribute("for", input.id);
     label.dataset.toggleTarget = `layer-${item.layerId}`;
     label.innerHTML = `<span class="text">${item.name}</span>`;
-
     group.append(input, label);
   });
   vegetationSection.prepend(group);
-  //------------------------------------------------------------------------------------------
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function enhanceMarkers(mapContainer, sidebar, zoomApi) {
   const markers = Array.from(mapContainer.querySelectorAll(".lugar1"));
 
@@ -722,6 +725,7 @@ function enhanceMarkers(mapContainer, sidebar, zoomApi) {
   updateSelection(false);
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function bindOverlayToggles() {
   document.querySelectorAll("[data-toggle-target]").forEach((trigger) => {
     const targetId = trigger.dataset.toggleTarget;
@@ -751,7 +755,7 @@ function moveCollectionsIntoSidebar(sidebar) {
   panel.appendChild(recol);
   sidebar.appendChild(panel);
 }
-
+//---------------------------------------------------------------------------------------------------------------
 function ensureCoordinateEditor(sidebar) {
   let editor = sidebar.querySelector(".map-editor");
 
@@ -797,6 +801,7 @@ function ensureCoordinateEditor(sidebar) {
   };
 }
 
+//---------------------------------------------------------------------------------------------------------------
 function bindCoordinateCapture(viewport, zoomApi, editor) {
   if (!viewport || !zoomApi || !editor) {
     return;
@@ -812,6 +817,7 @@ function bindCoordinateCapture(viewport, zoomApi, editor) {
   });
 }
 
+//---------------------------------------------------------------------------------------------------------------
 async function initializeMapPage() {
   const mapContainer = document.querySelector(".map-container");
   const sidebar = document.querySelector(".sidebar");
