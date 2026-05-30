@@ -602,7 +602,7 @@ function renderCollectionLayers(overlayRoot, rows) {
 //---------------------------------------------------------------------------------------------------------------
 function renderCollectionControls(sidebar, rows) {
   
-  const vegetationSection = sidebar.querySelector("#content2 .nojodas");
+  const vegetationSection = sidebar.querySelector("#content5 .nojodas");
   if (!vegetationSection || !rows.length) {
     return;
   }
