@@ -593,7 +593,7 @@ function renderCollectionLayers(overlayRoot, rows) {
 
 function renderCollectionControls(sidebar, rows) {
   
-  <!--Vegetación-->    
+  // Vegetación  ------------------------------------------------------------------------------------------------------------
   const vegetationSection = sidebar.querySelector("#content2 .nojodas");
   if (!vegetationSection || !rows.length) {
     return;
@@ -654,6 +654,69 @@ function renderCollectionControls(sidebar, rows) {
     group.append(input, label);
   });
   vegetationSection.prepend(group);
+
+  //Monstruos ------------------------------------------------------------------------------------------
+  const monsterSection = sidebar.querySelector("#content4 .nojodas");
+  if (!monsterSection || !rows.length) {
+    return;
+  }
+
+  monsterSection.querySelector(".dynamic-collection-group")?.remove();
+
+  const groupedmonst = rows.reduce((map, row) => {
+    if (!map.has(row.layerId)) {
+      map.set(row.layerId, row);
+    }
+
+    return map;
+  }, new Map());
+
+  // const unresolved = [];
+
+  Array.from(groupedmonst.values()).forEach((item, index) => {
+    const legacyLabelm = Array.from(monsterSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabelm) {
+      legacyLabelm.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabelm.classList.add("is-dynamic");
+      return;
+    }
+
+    unresolved.push({ item, index });
+  });
+
+  if (!unresolved.length) {
+    return;
+  }  
+  
+  const group = document.createElement("div");
+  group.className = "dynamic-collection-group";
+
+  const title = document.createElement("p");
+  title.className = "dynamic-collection-title";
+  title.textContent = "Capas por CSV";
+  group.appendChild(title);
+
+  unresolved.forEach(({ item, index }) => {
+    const input = document.createElement("input");
+    input.className = "checkbox-booking4";
+    input.type = "checkbox";
+    input.name = "booking";
+    input.id = `dynamic-booking-${300 + index + 1}`;
+
+    const label = document.createElement("label");
+    label.className = "for-checkbox-booking4 is-dynamic";
+    label.setAttribute("for", input.id);
+    label.dataset.toggleTarget = `layer-${item.layerId}`;
+    label.innerHTML = `<span class="text">${item.name}</span>`;
+
+    group.append(input, label);
+  });
+  monsterSection.prepend(group);
+  //------------------------------------------------------------------------------------------
 }
 
 function enhanceMarkers(mapContainer, sidebar, zoomApi) {
