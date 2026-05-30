@@ -598,6 +598,7 @@ function renderCollectionControls(sidebar, rows) {
   if (!vegetationSection || !rows.length) {
     return;
   }
+
   vegetationSection.querySelector(".dynamic-collection-group")?.remove();
 
   const grouped = rows.reduce((map, row) => {
@@ -624,33 +625,7 @@ function renderCollectionControls(sidebar, rows) {
 
     unresolved.push({ item, index });
   });
-  //-Comida Test-----------------------------------------------------------------------------------------
- const foodSection = sidebar.querySelector("#content5 .nojodas");
-  if (!foodSection || !rows.length) {
-    return;
-  }
-  foodSection.querySelector(".dynamic-collection-group")?.remove();
 
-  grouped = rows.reduce((map, row) => {
-    if (!map.has(row.layerId)) {
-      map.set(row.layerId, row);
-    }    return map;
-  }, new Map());
-  
-  Array.from(grouped.values()).forEach((item, index) => {
-    const legacyLabel2 = Array.from(foodSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
-      const text2 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
-      return text2 === item.name.trim().toLowerCase();
-    });
-      if (legacyLabel2) {
-      legacyLabel2.dataset.toggleTarget = `layer-${item.layerId}`;
-      legacyLabel2.classList.add("is-dynamic");
-      return;
-    }
-
-    unresolved.push({ item, index });
- });
-  //-restantes que no se integraron------------------------------------------------------------------------------------
   if (!unresolved.length) {
     return;
   }  
