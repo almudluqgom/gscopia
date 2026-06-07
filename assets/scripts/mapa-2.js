@@ -602,11 +602,20 @@ function renderCollectionLayers(overlayRoot, rows) {
 //---------------------------------------------------------------------------------------------------------------
 function renderCollectionControls(sidebar, rows) {
   
-  const vegetationSection = sidebar.querySelector("#content5 .nojodas");
-  if (!vegetationSection || !rows.length) {
+  const vegetationSection = sidebar.querySelector("#content2 .nojodas");
+  const mineralSection = sidebar.querySelector("#content3 .nojodas");
+  const faunaSection = sidebar.querySelector("#content4 .nojodas");
+  const foodSection = sidebar.querySelector("#content5 .nojodas");
+  
+  if (!vegetationSection || !mineralSection || !faunaSection || !foodSection || !rows.length) {
     return;
   }
+
   vegetationSection.querySelector(".dynamic-collection-group")?.remove();
+  mineralSection.querySelector(".dynamic-collection-group")?.remove();
+  faunaSection.querySelector(".dynamic-collection-group")?.remove();
+  foodSection.querySelector(".dynamic-collection-group")?.remove();
+
   const grouped = rows.reduce((map, row) => {
     if (!map.has(row.layerId)) {
       map.set(row.layerId, row);
@@ -625,6 +634,37 @@ function renderCollectionControls(sidebar, rows) {
     if (legacyLabel) {
       legacyLabel.dataset.toggleTarget = `layer-${item.layerId}`;
       legacyLabel.classList.add("is-dynamic");
+      return;
+    }
+    const legacyLabel2 = Array.from(mineralSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text2 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text2 === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabel2) {
+      legacyLabel2.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel2.classList.add("is-dynamic");
+      return;
+    }
+    const legacyLabel3 = Array.from(faunaSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text3 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text3 === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabel3) {
+      legacyLabel3.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel3.classList.add("is-dynamic");
+      return;
+    } 
+
+    const legacyLabel4 = Array.from(foodSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
+      const text4 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
+      return text4 === item.name.trim().toLowerCase();
+    });
+
+    if (legacyLabel4) {
+      legacyLabel4.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel4.classList.add("is-dynamic");
       return;
     }
 
@@ -658,6 +698,9 @@ function renderCollectionControls(sidebar, rows) {
     group.append(input, label);
   });
   vegetationSection.prepend(group);
+  mineralSection.prepend(group.cloneNode(true));
+  faunaSection.prepend(group.cloneNode(true));
+  foodSection.prepend(group.cloneNode(true));
 }
 //---------------------------------------------------------------------------------------------------------------
 function enhanceMarkers(mapContainer, sidebar, zoomApi) {
@@ -687,7 +730,6 @@ function enhanceMarkers(mapContainer, sidebar, zoomApi) {
   markers.forEach((marker) => {
     const input = marker.querySelector('input[name="tabthree-group-3"]');
     const label = marker.querySelector("label");
-    console.log(label);
     const content = marker.querySelector(".contentlugar");
     const glyph = label?.querySelector("span, i");
 
