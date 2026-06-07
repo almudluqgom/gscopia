@@ -631,42 +631,42 @@ function renderCollectionControls(sidebar, rows) {
       return text === item.name.trim().toLowerCase();
     });
 
-    if (legacyLabel) {
-      legacyLabel.dataset.toggleTarget = `layer-${item.layerId}`;
-      legacyLabel.classList.add("is-dynamic");
-      return;
-    }
+   
     const legacyLabel2 = Array.from(mineralSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
       const text2 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
       return text2 === item.name.trim().toLowerCase();
     });
 
-    if (legacyLabel2) {
-      legacyLabel2.dataset.toggleTarget = `layer-${item.layerId}`;
-      legacyLabel2.classList.add("is-dynamic");
-      return;
-    }
     const legacyLabel3 = Array.from(faunaSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
       const text3 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
       return text3 === item.name.trim().toLowerCase();
     });
 
-    if (legacyLabel3) {
-      legacyLabel3.dataset.toggleTarget = `layer-${item.layerId}`;
-      legacyLabel3.classList.add("is-dynamic");
-      return;
-    } 
 
     const legacyLabel4 = Array.from(foodSection.querySelectorAll("label[data-toggle-target]")).find((label) => {
       const text4 = label.textContent.replace(/\*/g, "").trim().toLowerCase();
       return text4 === item.name.trim().toLowerCase();
     });
-
+    if (legacyLabel || legacyLabel2 || legacyLabel3 || legacyLabel4) {
+      (legacyLabel || legacyLabel2 || legacyLabel3 || legacyLabel4).dataset.toggleTarget = `layer-${item.layerId}`;
+      (legacyLabel || legacyLabel2 || legacyLabel3 || legacyLabel4).classList.add("is-dynamic");
+      return;
+    }
+  /*   if (legacyLabel2) {
+      legacyLabel2.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel2.classList.add("is-dynamic");
+      return;
+    }
+    if (legacyLabel3) {
+      legacyLabel3.dataset.toggleTarget = `layer-${item.layerId}`;
+      legacyLabel3.classList.add("is-dynamic");
+      return;
+    } 
     if (legacyLabel4) {
       legacyLabel4.dataset.toggleTarget = `layer-${item.layerId}`;
       legacyLabel4.classList.add("is-dynamic");
       return;
-    }
+    } */
 
     unresolved.push({ item, index });
   });
@@ -678,8 +678,10 @@ function renderCollectionControls(sidebar, rows) {
   const group = document.createElement("div");
   group.className = "dynamic-collection-group";
   const title = document.createElement("p");
+
   title.className = "dynamic-collection-title";
   title.textContent = "Capas por CSV";
+  
   group.appendChild(title);
   unresolved.forEach(({ item, index }) => {
     const input = document.createElement("input");
