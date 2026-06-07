@@ -677,12 +677,10 @@ function renderCollectionControls(sidebar, rows) {
   
   const group = document.createElement("div");
   group.className = "dynamic-collection-group";
-
   const title = document.createElement("p");
   title.className = "dynamic-collection-title";
   title.textContent = "Capas por CSV";
   group.appendChild(title);
-
   unresolved.forEach(({ item, index }) => {
     const input = document.createElement("input");
     input.className = "checkbox-booking";
